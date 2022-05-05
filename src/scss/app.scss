@@ -1,19 +1,59 @@
-.fixed__centered {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.fixed__midBottom {
+  position: fixed;
+  top: 55vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.fadeIn {
-    animation: fadeIn .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+.fixed__centered {
+  position: fixed;
+  top: 50vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.d-flex {
+  display: flex;
+}
+
+.fadeIn--fast {
+  animation: fadeIn 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.fadeIn--slow {
+  animation: fadeIn 1s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.no-opacity {
+  transition: all .3s ease-out;
+  opacity: 0;
+}
+// Feedback interface colors //
+
+.wrapper--success {
+  filter: drop-shadow(0px 5px 8px #00ff73);
+}
+.wrapper--error {
+  filter: drop-shadow(0px 5px 8px #e54343);
+}
+
+.card--success {
+  border-inline: 5px solid #8ac687;
+  border-top: 5px solid #34a43d;
+  box-shadow: inset 0px 0px 10px #00ff00;
+}
+
+.card--error {
+  border-inline: 5px solid #c68787;
+  border-top: 5px solid #a43434;
+  box-shadow: inset 0px 0px 10px red;
 }

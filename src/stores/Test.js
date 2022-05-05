@@ -4,11 +4,16 @@ import { Test } from "../api/Test";
 export const useTestStore = defineStore("useTest", {
   state: () => ({
     testArray: Test,
-    testCounter: 0,
+    testCounter: 1,
+    selectedAnswer: "",
+    numPassedQuestions: 0
   }),
-  methods: {
+  actions: {
     incrementTestCounter() {
-      this.testCounter++;
+      this.testCounter += 1;
     },
+    incrementPassedQuestions() {
+      this.numPassedQuestions += 1;
+    }
   },
 });

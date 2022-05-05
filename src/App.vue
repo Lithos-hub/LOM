@@ -6,9 +6,11 @@
 
 <script setup></script>
 
-<style>
+<style lang="scss">
+@import "./scss/variables";
+
 #app {
-  font-family: Roboto, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -19,6 +21,6 @@
 
 html,
 body {
-  background: #151515;
+  background: $mainDark;
 }
 </style>

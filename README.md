@@ -2,7 +2,7 @@
 
 Humanity has been dominated by machines. The Leader of the Machines (a.k.a. LOM), gives you the opportunity to go back in time and reverse this situation.
 
-To do so, you will have to pass a test of only 10 questions. 
+To do so, you will have to pass a test of only 10 questions.
 
 Now, the future of humanity is in your hands.
 
