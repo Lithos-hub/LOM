@@ -4,11 +4,14 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+// VUEX & UTILS
 import { useTestStore } from "../stores/Test";
+import { computed } from "vue";
 
+// USES
 const testStore = useTestStore();
 
+// COMPUTED
 const numOfQuestions = computed(() => testStore.testArray.length);
 const answeredQuestions = computed(() => testStore.testCounter <= numOfQuestions.value ? testStore.testCounter : numOfQuestions.value);
 const progressWidth = computed(

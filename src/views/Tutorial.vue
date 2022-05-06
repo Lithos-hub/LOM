@@ -9,7 +9,7 @@
     <h3>
       There are three different question types:
     </h3>
-      <ul class="ul--wrapper d-flex">
+      <ul :class="'ul--wrapper ' + isUsingMobile ? 'd-block' : 'd-flex'">
         <li class="d-flex options__li">
             <p>
                 Four options:
@@ -50,12 +50,19 @@
 </template>
 
 <script setup>
+// UTILS
+import { computed } from "vue";
 import router from "../router";
 
+// METHODS
 const comeback = () => router.go(-1);
+
+// COMPUTED
+const isUsingMobile = computed(() => window.innerWidth < 1000)
 </script>
 
 <style lang="scss" scoped>
+@import '../scss/variables';
 @import '../scss/app';
 
 h3 {
@@ -73,7 +80,7 @@ ul {
   li {
     background: #303030;
     margin-block: 10px;
-    border-radius: 25px;
+    border-radius: $mainRadius;
     padding: 10px;
     text-shadow: 0px 0px 2px white, 0px 0px 15px gold;
 
@@ -84,11 +91,11 @@ ul {
 }
 
 button {
-  transition: all 0.3s ease-out;
+  transition: $transitionMid;
   cursor: pointer;
   background: none;
   border: 2px solid cyan;
-  border-radius: 10px;
+  border-radius: $mainRadius;
   width: 350px;
   padding: 20px;
   color: cyan;
@@ -109,13 +116,13 @@ button {
 }
 .options__ul {
     background: #505050;
-    border-radius: 25px;
+    border-radius: $mainRadius;
     padding-inline: 15px;
     width: 50%;
     margin-block: auto;
 
     li {
-      transition: all .3s ease-out;
+      transition: $transitionMid;
 
       &:hover {
         cursor: pointer;
@@ -125,7 +132,7 @@ button {
 }
 
 input {
-    transition: all 0.3s ease-out;
+    transition: $transitionMid;
     margin-block: 10px;
     background: #304f6020;
     color: cyan;
@@ -133,7 +140,7 @@ input {
     padding-block: 15px;
     padding-inline: 10px;
     width: 90%;
-    border-radius: 25px;
+    border-radius: $mainRadius;
     border: 2px solid white;
     font-size: 16px;
     text-align: center;

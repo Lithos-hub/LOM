@@ -1,21 +1,22 @@
 <template>
   <Progress />
   <Feedback
-    :key="componentKey"
+    :key="COMPONENT_KEY"
     v-if="isShowingFeedback"
     :color="feedbackObject.color"
     :message="feedbackObject.message"
+    :correct-answer="test.correctAnswer"
   />
   <Question
     v-if="answeredQuestions <= numOfQuestions"
-    :key="componentKey"
+    :key="COMPONENT_KEY"
     :test="test"
     @submit-answer="submit"
     :is-checking="isChecking"
   />
   <Endgame v-else />
-  <router-link to="/about">
-    <button class="about__button">About</button>
+  <router-link to="/tutorial">
+    <button class="about__button">Tutorial</button>
   </router-link>
 </template>
 
@@ -30,16 +31,11 @@ import Feedback from "../components/Feedback.vue";
 import Endgame from "../components/Endgame.vue";
 import Progress from "../components/Progress.vue";
 
-// STORE USES
+// USES
 const testStore = useTestStore();
 
-let componentKey = ref(0); // => To force update the component
-const test = computed(() => testStore.testArray.at(testStore.testCounter - 1));
-const correctAnswer = computed(() => test.value.correctAnswer);
-const selectedAnswer = computed(() => testStore.selectedAnswer);
-const numOfQuestions = computed(() => testStore.testArray.length);
-const answeredQuestions = computed(() => testStore.testCounter);
-
+// REFS
+const COMPONENT_KEY = ref(0); // => To force update the component
 const isShowingFeedback = ref(false);
 const feedbackObject = ref({
   color: "success",
@@ -47,17 +43,25 @@ const feedbackObject = ref({
 });
 const isChecking = ref(false);
 
+// COMPUTED
+const test = computed(() => testStore.testArray.at(testStore.testCounter - 1));
+const correctAnswer = computed(() => test.value.correctAnswer);
+const selectedAnswer = computed(() => testStore.selectedAnswer);
+const numOfQuestions = computed(() => testStore.testArray.length);
+const answeredQuestions = computed(() => testStore.testCounter);
+
+// METHODS
 const goToNextQuestion = () => {
   testStore.selectedAnswer = "";
   testStore.incrementTestCounter();
-  componentKey.value += 1;
+  COMPONENT_KEY.value += 1;
 };
 
 const showFeedback = (color, message) => {
   feedbackObject.value.color = color;
   feedbackObject.value.message = message;
   isShowingFeedback.value = true;
-  componentKey.value += 1;
+  COMPONENT_KEY.value += 1;
 
   setTimeout(() => {
     isShowingFeedback.value = false;
@@ -68,7 +72,7 @@ const submit = () => {
   isChecking.value = true;
   console.log("Checking answer...");
   console.log("My answer ==> ", selectedAnswer.value);
-  console.log("Correct ==> ", correctAnswer.value);
+  console.log("Correct answer ==> ", correctAnswer.value);
   // ** Here we have to check the answer ** \\
   // If the answer is correct, the user must receive a positive feedback 👍
   // Otherwise, the feedback must be negative 👎 (and mankind will be condemned! 😱 )
@@ -82,12 +86,12 @@ const submit = () => {
       );
       testStore.incrementPassedQuestions();
     } else {
-      showFeedback("error", "You failed, human. Try the following question.");
+      showFeedback("error", "You have failed, human. Try the following question.");
     }
   } else {
     showFeedback(
       "success",
-      `Good. The humanity will have a second chance, but... we both know that we will meet again.`
+      `Good... the game has finished. Let's see the results.`
     );
     testStore.incrementPassedQuestions();
   }
@@ -100,9 +104,11 @@ const submit = () => {
 
 
 <style lang="scss" scoped>
+@import '../scss/variables';
+@import '../scss/app';
 
 .about__button {
-  transition: all .3s ease-out;
+  transition: $transitionMid;
   cursor: pointer;
   width: auto;
   padding-inline: 2vw;
@@ -119,7 +125,7 @@ const submit = () => {
 
   &:hover {
     background: #404040;
-    border-radius: 25px;
+    border-radius: $mainRadius;
     border: 1px solid white;
   }
 }

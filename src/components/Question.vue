@@ -8,7 +8,7 @@
           </header>
           <div :class="isChecking ? 'no-opacity' : ''" class="card__body">
             <ul v-if="test.answers && test.answers.length">
-              <li v-for="answer in test.answers" @click="selectAnswer(answer)">
+              <li v-for="answer in test.answers" @click="testStore.setSelectedAnswer(answer)">
                 {{ answer }}
               </li>
             </ul>
@@ -16,7 +16,7 @@
               v-else
               v-model="inputAnswer"
               placeholder="Write your answer"
-              @input="selectAnswer(inputAnswer)"
+              @input="testStore.setSelectedAnswer(inputAnswer)"
               @change="submitAnswer"
             />
           </div>
@@ -40,8 +40,11 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref } from "vue";
+// VUEX & UTILS
 import { useTestStore } from "../stores/Test";
+import { onMounted, computed, ref, watch } from "vue";
+
+// PROPS & EMITS
 const props = defineProps({
   test: {
     type: Object,
@@ -53,18 +56,24 @@ const props = defineProps({
   },
 });
 
-const { test } = props;
-
-const testStore = useTestStore();
-const selectAnswer = (answer) => (testStore.selectedAnswer = answer);
-const selectedAnswer = computed(() => testStore.selectedAnswer);
-const inputAnswer = ref("");
+const { test, isChecking } = props;
 
 const emit = defineEmits(["submitAnswer"]);
 const submitAnswer = () => emit("submitAnswer");
 
+// USES
+const testStore = useTestStore();
+
+// REFS
+const inputAnswer = ref("");
+
+// COMPUTED
+const selectedAnswer = computed(() => testStore.selectedAnswer);
+
+// METHODS
 const listenSelectAnswer = () => {
   const list = [...document.querySelectorAll("li")];
+  let counter = 0;
   if (list.length) {
     list.at(0).style.background = "#304f6020";
     list.forEach((item) => {
@@ -73,33 +82,41 @@ const listenSelectAnswer = () => {
         target.classList.toggle("selected__item");
       });
     });
-    let counter = 0;
-    window.addEventListener("keydown", ({ code }) => {
-      if (code === "ArrowUp" && counter > 0 && counter <= list.length) {
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "ArrowUp" && counter > 0 && counter <= list.length) {
         counter -= 1;
       }
-      if (code === "ArrowDown" && counter >= 0 && counter < list.length - 1) {
+      if (e.code === "ArrowDown" && counter >= 0 && counter < list.length - 1) {
         counter += 1;
       }
-      if (code === "ArrowDown" || code === "ArrowUp") {
+      if (e.code === "ArrowDown" || e.code === "ArrowUp") {
         list.map((li) => (li.style.background = "none"));
         const hoverItemList = list.at(counter);
         hoverItemList.style.background = "#304f6020";
       }
-      if (code === "Space") {
+      if (e.code === "Space") {
         list.at(counter).click();
         list.map((li) => li.classList.remove("selected__item"));
         const selectedListItem = list.at(counter);
         selectedListItem.classList.add("selected__item");
       }
-      if (code === "Enter") {
+      if (e.code === "Enter" && selectedAnswer.value) {
         submitAnswer();
+        counter = 0;
       }
     });
   }
 };
 
-onMounted(() => listenSelectAnswer());
+// WATCHERS
+watch(() => isChecking, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    listenSelectAnswer();
+  }
+});
+
+// LIFECYCLE
+onMounted(() => setTimeout(() => listenSelectAnswer(), 500));
 </script>
 
 <style lang="scss" scoped>
@@ -116,7 +133,7 @@ onMounted(() => listenSelectAnswer());
   box-shadow: inset 0px 0px 10px cyan;
 }
 .card--wrapper {
-  transition: 0.3s ease-out;
+  transition: $transitionMid;
   height: auto;
   width: 85vw;
   animation: expand 1s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -124,7 +141,7 @@ onMounted(() => listenSelectAnswer());
 
 .card {
   position: relative;
-  transition: 0.3s ease-out;
+  transition: $transitionMid;
   padding-block: 25px;
   background: linear-gradient(
     120deg,
@@ -135,7 +152,7 @@ onMounted(() => listenSelectAnswer());
   background-size: 150% 200%;
   background-position: 0px 0px;
   width: 100%;
-  border-radius: 25px;
+  border-radius: $mainRadius;
   clip-path: polygon(
     50% 0%,
     95% 0,
@@ -156,7 +173,7 @@ onMounted(() => listenSelectAnswer());
 
 .card__title {
   font-size: 1.5em;
-  border-radius: 25px 25px 0px 0px;
+  border-radius: $mainRadius 25px 0px 0px;
   margin-inline: 5vw;
 }
 
@@ -182,15 +199,15 @@ onMounted(() => listenSelectAnswer());
     }
   }
   input {
-    transition: all 0.3s ease-out;
+    transition: $transitionMid;
     margin-block: 25px;
     background: #304f6020;
     color: cyan;
     caret-color: cyan;
     padding-block: 10px;
     padding-inline: 10px;
-    width: 50%;
-    border-radius: 25px;
+    width: 75vw;
+    border-radius: $mainRadius;
     border: 2px solid white;
     font-size: 2em;
     text-align: center;
@@ -218,12 +235,12 @@ onMounted(() => listenSelectAnswer());
   left: 0;
   width: 100%;
   padding-block: 30px;
-  border-radius: 10px;
+  border-radius: $mainRadius;
 }
 
 .card__submitButton {
   cursor: pointer;
-  transition: all 0.3s ease-out;
+  transition: $transitionMid;
   border: 1px solid cyan;
   background: #0e2321;
   color: cyan;

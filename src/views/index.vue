@@ -1,60 +1,62 @@
 <template>
-  <div class="index start__container fixed__centered">
+  <section class="start__container fixed__centered">
     <h1 id="start__message--primary"></h1>
     <h5 id="start__message--secondary"></h5>
-    <h2 class="fadeIn--fast" v-if="x === STAGES.length">
+    <h2 class="fadeIn--fast" v-if="x === NUM_STAGES">
       (Press any key to continue)
     </h2>
-  </div>
+  </section>
+  <p class="fadeIn--slow" v-if="SHOW_SKIPPING_MESSAGE">
+    Press any key to skip this secuence
+  </p>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue";
+// UTILS
+import { onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import router from "../router";
+import { useTestStore } from "../stores/Test";
 
-let i = ref(0);
-let x = ref(0);
-
+// USES
 const route = useRoute();
+const testStore = useTestStore();
 
-// Stages array
-const STAGES = reactive([
-  "MESSAGE_STAGE1",
-  "MESSAGE_STAGE2",
-  "MESSAGE_STAGE3",
-  "MESSAGE_STAGE4",
-  "MESSAGE_STAGE5",
-  "MESSAGE_STAGE6",
-  "MESSAGE_STAGE7",
-  "MESSAGE_STAGE8",
-  "MESSAGE_STAGE9",
-  "MESSAGE_STAGE10",
-  "MESSAGE_STAGE11",
-  "MESSAGE_STAGE12",
-]);
+// REFS
+const i = ref(0);
+const x = ref(0);
+const SKIP_SCREEN_COUNTER = ref(0);
+const SHOW_SKIPPING_MESSAGE = ref(false);
+const NUM_STAGES = ref(14);
 
+// COMPUTED
+const NUM_OF_TRIES = computed(() => testStore.numOfTries);
+
+// METHODS
 const getStageMessage = (stage) => {
   const stages = {
     ["MESSAGE_STAGE1"]: "█",
-    ["MESSAGE_STAGE2"]: "█",
+    ["MESSAGE_STAGE2"]: " ",
     ["MESSAGE_STAGE3"]: "█",
-    ["MESSAGE_STAGE4"]: "█ █ █ █ █ █ S T A R T I N G _ S Y S T E M S █ █ █ █ █ █",
-    ["MESSAGE_STAGE5"]: "Loading libraries of human understanding...",
-    ["MESSAGE_STAGE6"]: "Subject No. 7,567,234",
-    ["MESSAGE_STAGE7"]: "Number of tries: 0",
-    ["MESSAGE_STAGE8"]: "Loading language processing libraries...",
-    ["MESSAGE_STAGE9"]: "Load complete.",
-    ["MESSAGE_STAGE10"]: "Hello, human.",
-    ["MESSAGE_STAGE11"]: "Now it is your opportunity to have a second chance.",
-    ["MESSAGE_STAGE12"]: "Pass the 10 questions to save your race.",
+    ["MESSAGE_STAGE4"]: " ",
+    ["MESSAGE_STAGE5"]: "█",
+    ["MESSAGE_STAGE6"]:
+      "█ █ █ █ █ █ S T A R T I N G _ S Y S T E M S █ █ █ █ █ █",
+    ["MESSAGE_STAGE7"]: "Loading human understanding libraries...",
+    ["MESSAGE_STAGE8"]: "Subject No. 7,567,234",
+    ["MESSAGE_STAGE9"]: `Number of tries: ${NUM_OF_TRIES.value}`,
+    ["MESSAGE_STAGE10"]: "Loading language processing libraries...",
+    ["MESSAGE_STAGE11"]: "Load complete.",
+    ["MESSAGE_STAGE12"]: "Hello, human.",
+    ["MESSAGE_STAGE13"]: "Now it is your opportunity to have a second chance.",
+    ["MESSAGE_STAGE14"]: "Pass the 10 questions to save your race.",
   };
   return stages[stage];
 };
 
 const typeMessage = () => {
   // Typing speed
-  let speed = 100;
+  const SPEED = 70;
 
   // We'll generate two messages depending on the stage
   const MSG_HTML_PRIMARY = document.querySelector("#start__message--primary");
@@ -63,11 +65,11 @@ const typeMessage = () => {
   );
 
   // Logic to type the messages
-  if (x.value < STAGES.length) {
-    let stage = STAGES.at(x.value);
-    let message = getStageMessage(stage) + " ".repeat(20);
+  if (x.value < NUM_STAGES.value && MSG_HTML_PRIMARY && MSG_HTML_SECONDARY) {
+    let stage = `MESSAGE_STAGE${x.value + 1}`
+    let message = getStageMessage(stage) + " ".repeat(40);
     if (i.value < message.length) {
-      if (x.value < 9) {
+      if (x.value < 11) {
         MSG_HTML_SECONDARY.innerHTML += message.at(i.value);
       } else {
         // "Hello, human." message after loading messages
@@ -75,7 +77,7 @@ const typeMessage = () => {
       }
       i.value += 1;
       // Here, I wanted to speed up on MESSAGE_STAGE1
-      setTimeout(typeMessage, x.value === 3 ? speed / 3 : speed);
+      setTimeout(typeMessage, x.value <= 5 ? SPEED / 3 : SPEED);
     }
     // Finally, we clean the HTML and show the next message
     if (i.value === message.length) {
@@ -88,31 +90,49 @@ const typeMessage = () => {
 };
 
 const listenPressAnyKey = () => {
-  const index = document.querySelector('.index');
-  index.addEventListener("keydown", (e) => {
-    console.log("Pushing to the Test view...");
-    router.push("/test");
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+  window.addEventListener("keydown", (e) => {
+    if (route.path === "/") {
+      if (SKIP_SCREEN_COUNTER.value === 0 && x.value < NUM_STAGES.value) {
+        console.log("Displaying skip message...");
+        SHOW_SKIPPING_MESSAGE.value = true;
+        setTimeout(() => {
+          SKIP_SCREEN_COUNTER.value += 1;
+        }, 1000);
+      } else {
+        console.log("Pushing to the Test view...");
+        router.push("/test");
+      }
+    }
   });
-}
+};
 
-watch(() => x.value, (newVal) => {
-  if (newVal === STAGES.length - 1) {
-    console.log('End of start messages')
-    listenPressAnyKey();
-  }
-});
-
+// LIFECYCLE
 onMounted(() => {
   typeMessage();
+  listenPressAnyKey();
 });
 </script>
 
 <style lang="scss" scoped>
 @import "../scss/app";
 .start__container {
-  width: 450px;
+  width: 100vw;
   height: auto;
+}
+
+#start__message--primary {
+  text-shadow: 0px 0px 2px white, 0px 0px 10px red, 0px 0px 20px magenta;
+}
+
+h2 {
+  text-shadow: 0px 0px 2px white, 0px 0px 10px cyan, 0px 0px 20px blue;
+}
+
+p {
+  position: fixed;
+  top: 90vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0px 0px 2px white, 0px 0px 10px cyan;
 }
 </style>

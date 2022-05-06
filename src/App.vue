@@ -1,10 +1,23 @@
 <template>
-  <div class="app">
+  <div>
     <router-view />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+// VUEX & UTILS
+import { useTestStore } from './stores/Test';
+import { onMounted } from 'vue';
+
+// USES
+const testStore = useTestStore();
+
+// METHODS
+const setNumOfTries = () => localStorage.setItem('numOfTries', testStore.numOfTries);
+
+// LIFECYCLE
+onMounted(() => setNumOfTries());
+</script>
 
 <style lang="scss">
 @import "./scss/variables";
@@ -15,7 +28,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: white;
-  text-shadow: 0px 0px 2px white, 0px 0px 10px green;
+  text-shadow: 0px 0px 2px white, 0px 0px 10px #2dcd92;
   margin-top: 60px;
 }
 

@@ -1,13 +1,19 @@
 <template>
   <section class="feedback__wrapper">
-    <div id="feedback" :class="color">{{ message }}</div>
+    <div id="feedback" :class="color">
+      <h3>{{ message }}</h3>
+      <div v-if="color === 'error'">
+        <h4>The correct answer was: <br> {{ correctAnswer }}</h4>
+      </div>
+    </div>
   </section>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+// UTILS
+import { onMounted } from "vue";
 
-
+// PROPS
 const props = defineProps({
   color: {
     type: String,
@@ -17,19 +23,24 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  correctAnswer: {
+    type: String,
+    required: true,
+  },
 });
 
 const { color, message } = props;
 
+// LIFECYCLE
 onMounted(() => {
-    const cardWrapper = document.querySelector(".card--wrapper");
-    const card = document.querySelector(".card");
+  const cardWrapper = document.querySelector(".card--wrapper");
+  const card = document.querySelector(".card");
 
-    cardWrapper.classList.remove(`wrapper--neutral`);
-    card.classList.remove(`card--neutral`);
-    cardWrapper.classList.add(`wrapper--${color}`);
-    card.classList.add(`card--${color}`);
-})
+  cardWrapper.classList.remove(`wrapper--neutral`);
+  card.classList.remove(`card--neutral`);
+  cardWrapper.classList.add(`wrapper--${color}`);
+  card.classList.add(`card--${color}`);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -42,13 +53,14 @@ onMounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  width: 65%;
+  width: 65vw;
 }
 
 #feedback {
-  padding-block: 5vh;
+  padding-block: 3vh;
+  padding-inline: 3vw;
   font-size: 2rem;
-  border-radius: 25px;
+  border-radius: $mainRadius;
   border: 2px solid white;
   font-weight: bold;
   color: white;

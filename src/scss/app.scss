@@ -1,6 +1,15 @@
+@import './variables';
+
 .fixed__midBottom {
   position: fixed;
   top: 55vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.fixed__nearBottom {
+  position: fixed;
+  top: 90vh;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -14,6 +23,11 @@
 
 .d-flex {
   display: flex;
+}
+
+.d-block {
+  display: block;
+  padding: 0;
 }
 
 .fadeIn--fast {
@@ -34,7 +48,7 @@
 }
 
 .no-opacity {
-  transition: all .3s ease-out;
+  transition: $transitionMid;
   opacity: 0;
 }
 // Feedback interface colors //
