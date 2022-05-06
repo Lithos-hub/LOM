@@ -90,16 +90,14 @@ const typeMessage = () => {
 };
 
 const listenPressAnyKey = () => {
-  window.addEventListener("keydown", (e) => {
+  window.addEventListener("keydown", () => {
     if (route.path === "/") {
       if (SKIP_SCREEN_COUNTER.value === 0 && x.value < NUM_STAGES.value) {
-        console.log("Displaying skip message...");
         SHOW_SKIPPING_MESSAGE.value = true;
         setTimeout(() => {
           SKIP_SCREEN_COUNTER.value += 1;
         }, 1000);
       } else {
-        console.log("Pushing to the Test view...");
         router.push("/test");
       }
     }

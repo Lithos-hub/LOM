@@ -1,4 +1,5 @@
 <template>
+<img class="noise" src="./assets/noise.png">
   <div>
     <router-view />
   </div>
@@ -34,6 +35,27 @@ onMounted(() => setNumOfTries());
 
 html,
 body {
-  background: $mainDark;
+  background: radial-gradient(circle, rgb(0, 15, 10) 50%, black);
+}
+
+.noise {
+  z-index: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+  animation: noise 500ms linear infinite;
+  mix-blend-mode: exclusion;
+  background: linear-gradient(rgb(0, 15, 10) 50%, black);
+}
+@keyframes noise {
+  from {
+    top: -1000px;
+    left: -500px;
+  }
+  to {
+    top: 0px;
+    left: 0px;
+    }
 }
 </style>

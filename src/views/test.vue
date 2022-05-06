@@ -70,9 +70,6 @@ const showFeedback = (color, message) => {
 
 const submit = () => {
   isChecking.value = true;
-  console.log("Checking answer...");
-  console.log("My answer ==> ", selectedAnswer.value);
-  console.log("Correct answer ==> ", correctAnswer.value);
   // ** Here we have to check the answer ** \\
   // If the answer is correct, the user must receive a positive feedback 👍
   // Otherwise, the feedback must be negative 👎 (and mankind will be condemned! 😱 )

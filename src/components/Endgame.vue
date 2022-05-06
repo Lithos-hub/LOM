@@ -8,7 +8,7 @@
     <br />
     <h3 v-if="numPassedQuestions !== 10" class="fail__text">
       You didn't pass all the questions, <br />
-      and the humanity will not have a second chance <br />
+      and the humanity will not have a second chance. <br />
       As I am a merciful (and awesome) machine, I will let you play again.
     </h3>
     <h3 v-else class="success__text" @click="restartGame">

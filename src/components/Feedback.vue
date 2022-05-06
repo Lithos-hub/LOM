@@ -59,7 +59,7 @@ onMounted(() => {
 #feedback {
   padding-block: 3vh;
   padding-inline: 3vw;
-  font-size: 2rem;
+  font-size: 1.5rem;
   border-radius: $mainRadius;
   border: 2px solid white;
   font-weight: bold;
