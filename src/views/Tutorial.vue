@@ -9,7 +9,7 @@
     <h3>
       There are three different question types:
     </h3>
-      <ul :class="'ul--wrapper ' + isUsingMobile ? 'd-block' : 'd-flex'">
+      <ul class="ul--wrapper">
         <li class="d-flex options__li">
             <p>
                 Four options:
@@ -51,14 +51,9 @@
 
 <script setup>
 // UTILS
-import { computed } from "vue";
 import router from "../router";
-
 // METHODS
 const comeback = () => router.go(-1);
-
-// COMPUTED
-const isUsingMobile = computed(() => window.innerWidth < 1000)
 </script>
 
 <style lang="scss" scoped>
@@ -73,13 +68,20 @@ h3 {
   justify-content: space-around;
   margin: 0 auto;
   padding: 0;
+
+  li {
+    width: auto;
+    margin-inline: 15px;
+  }
 }
+
 ul {
   list-style: none;
 
   li {
     background: #303030;
     margin-block: 10px;
+    width: 100%;
     border-radius: $mainRadius;
     padding: 10px;
     text-shadow: 0px 0px 2px white, 0px 0px 15px gold;
@@ -117,8 +119,8 @@ button {
 .options__ul {
     background: #505050;
     border-radius: $mainRadius;
-    padding-inline: 15px;
-    width: 50%;
+    padding-inline: 0;
+    width: 100%;
     margin-block: auto;
 
     li {
@@ -139,7 +141,7 @@ input {
     caret-color: cyan;
     padding-block: 15px;
     padding-inline: 10px;
-    width: 90%;
+    width: 80%;
     border-radius: $mainRadius;
     border: 2px solid white;
     font-size: 16px;
@@ -149,4 +151,17 @@ input {
     outline: none;
   }
 }
+
+@media only screen and (min-width: 360px) {
+  .ul--wrapper {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 760px) {
+  .ul--wrapper {
+    display: flex;
+  }
+}
+
 </style>
