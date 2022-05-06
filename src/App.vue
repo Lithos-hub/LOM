@@ -1,8 +1,8 @@
 <template>
-<img class="noise" src="./assets/noise.png">
   <div>
     <router-view />
   </div>
+    <img class="noise" src="./assets/noise.png">
 </template>
 
 <script setup>
@@ -33,13 +33,12 @@ onMounted(() => setNumOfTries());
   margin-top: 60px;
 }
 
-html,
 body {
   background: radial-gradient(circle, rgb(0, 15, 10) 50%, black);
 }
 
 .noise {
-  z-index: 0;
+  z-index: -1;
   position: fixed;
   top: 0;
   left: 0;

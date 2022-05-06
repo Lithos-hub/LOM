@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="tutorial">
     <h1>Tutorial and controls:</h1>
     <hr />
     <h3>
