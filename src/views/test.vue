@@ -79,7 +79,7 @@ const submit = () => {
     ) {
       showFeedback(
         "success",
-        `Congratulations, human. You have pass this question. Let's continue.`
+        `Congratulations, human. You have passed this question. Let's continue.`
       );
       testStore.incrementPassedQuestions();
     } else {

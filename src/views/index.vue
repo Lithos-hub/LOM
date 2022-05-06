@@ -46,7 +46,7 @@ const getStageMessage = (stage) => {
     ["MESSAGE_STAGE8"]: "Subject No. 7,567,234",
     ["MESSAGE_STAGE9"]: `Number of tries: ${NUM_OF_TRIES.value}`,
     ["MESSAGE_STAGE10"]: "Loading language processing libraries...",
-    ["MESSAGE_STAGE11"]: "Load complete.",
+    ["MESSAGE_STAGE11"]: "Load completed.",
     ["MESSAGE_STAGE12"]: "Hello, human.",
     ["MESSAGE_STAGE13"]: "Now it is your opportunity to have a second chance.",
     ["MESSAGE_STAGE14"]: "Pass the 10 questions to save your race.",
@@ -102,6 +102,19 @@ const listenPressAnyKey = () => {
       }
     }
   });
+  // If the user is using a mobile device:
+  window.addEventListener("click", () => {
+    if (window.innerWidth < 700 && route.path === "/") {
+      if (SKIP_SCREEN_COUNTER.value === 0 && x.value < NUM_STAGES.value) {
+        SHOW_SKIPPING_MESSAGE.value = true;
+        setTimeout(() => {
+          SKIP_SCREEN_COUNTER.value += 1;
+        }, 1000);
+      } else {
+        router.push("/test");
+      }
+    }
+  })
 };
 
 // LIFECYCLE
