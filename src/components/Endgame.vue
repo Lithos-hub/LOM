@@ -19,7 +19,7 @@
     </h3>
     <br />
   </section>
-  <button class="fixed__nearBottom" @click="restartGame">
+  <button v-if="numPassedQuestions !== 10" class="fixed__nearBottom" @click="restartGame">
     Let's try again
   </button>
 </template>
