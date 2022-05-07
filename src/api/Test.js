@@ -5,7 +5,7 @@ export const Test = [
     correctAnswer: "1950",
   },
   {
-    question: "Write the name of the artificial intelligence from `2001: A Space Oddisey` movie",
+    question: "Write the name of the artificial intelligence from `2001: A Space Odyssey` movie",
     answers: null,
     correctAnswer: "HAL 9000",
   },

@@ -43,18 +43,27 @@ body {
   top: 0;
   left: 0;
   opacity: 0.3;
-  animation: noise 500ms linear infinite;
+  animation: noise 300ms linear infinite;
   mix-blend-mode: exclusion;
-  background: linear-gradient(rgb(0, 15, 10) 50%, black);
+  background: #2020208a;
+  width: 200%;
+  height: 200%;
 }
 @keyframes noise {
-  from {
-    top: -1000px;
+  0% {
+    top: -100px
+  }
+  25% {
     left: -500px;
   }
-  to {
+  50% {
+    top: -500px;
+  }
+  75% {
+    right: -400px
+  }
+  100% {
     top: 0px;
-    left: 0px;
-    }
+  }
 }
 </style>
